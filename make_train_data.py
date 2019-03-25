@@ -11,6 +11,7 @@ for file in os.listdir('./raw_train_data'):
     img = cv2.copyMakeBorder(img, (int)(img_raw_height * 0.5), (int)(img_raw_height * 0.5), (int)(img_raw_width * 0.5), (int)(img_raw_width * 0.5),
                              cv2.BORDER_CONSTANT, None, value)
     img_padded_width, img_padded_height = img.shape[:2]
+
     for i in range(7):
         idx += 1
         angle = random.randint(-20, 20)

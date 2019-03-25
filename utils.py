@@ -12,7 +12,7 @@ def rotate_img(img, angle):
 def make_train_datset(train_dat_dir, val_dat_dir):
     data_generator = ImageDataGenerator(rescale=1. / 255)
 
-    train_generator = data_generator.flow_from_directory(train_dat_dir, target_size=(224, 224), batch_size=100, class_mode='sparse')
-    validation_generator = data_generator.flow_from_directory(val_dat_dir, target_size=(224, 224), batch_size=100, class_mode='sparse')
+    train_generator = data_generator.flow_from_directory(train_dat_dir, target_size=(224, 224), batch_size=16, class_mode='sparse')
+    validation_generator = data_generator.flow_from_directory(val_dat_dir, target_size=(224, 224), batch_size=16, class_mode='sparse')
 
     return train_generator, validation_generator
