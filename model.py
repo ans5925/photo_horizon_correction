@@ -5,6 +5,7 @@ from keras_applications.imagenet_utils import decode_predictions
 from keras_applications.imagenet_utils import _obtain_input_shape
 from keras.layers import GlobalAveragePooling2D, Dense
 from keras import Model
+import keras.backend as K
 
 backend = None
 layers = None
@@ -122,12 +123,28 @@ class Model_for_training:
         self.model = resnet50.ResNet50(weights='imagenet', include_top=True, input_shape=(224, 224, 3))
 
     def build_model(self):
+        session = K.get_session()
+        idx = 0
         # Reset weights of 9 Residual Blocks for retraining
-        '''
-        for i in range(94):
-            # 94개의 Layer의 가중치를 초기화해야 함. 근데 어떻게 해야 하지??
-        '''
+        # Total layer : 175 layers
+        # Layers to be initialized : 94 layers
+        for layer in self.model.layers:
+            if idx < 94:
+                continue
+            else:
+                layer.kernel.initializer.run(session=session)
 
+
+        #for i in range(94):
+            # 94개의 Layer의 가중치를 초기화해야 함. 근데 어떻게 해야 하지??
+
+        self.model.layers.pop()
+
+        x = Dense(1, activation='linear', name='predictions')(self.model.layers[-1].output)
+
+        self.model = Model(input=self.model.input, output=x)
+
+        self.model.compile(optimizer='adam', loss='mean_absolute_error')
         self.model.summary()
 
         return self.model
